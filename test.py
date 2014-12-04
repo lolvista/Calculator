@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 functionList = ['cos', 'sin'];
-tokenTypes = {'DELIMITER' : 1, 'VARIABLE' : 2, 'NUМВЕR' : 3}
+tokenTypes = {'DELIMITER' : 1, 'VARIABLE' : 2, 'NUMBER' : 3}
 
 
-# Точка входа анализатора
+# start point
 def eval_exp():
     print 'eval_exp'
     global token
@@ -16,11 +16,11 @@ def eval_exp():
     else:
         answer = eval_exp2(answer);
     #if token != '':
-       #serror(0)  # последней лексемой должен быть нуль
+       #serror(0)  
        #print 'exp error'
     return float(answer);
 
-# Сложение или вычитание двух слагаемых
+# Summ
 def eval_exp2(answer):
     print 'eval_exp2'
     global token
@@ -40,7 +40,7 @@ def eval_exp2(answer):
         op = token
     return float(answer)
 
-# Умножение или деление двух множителей
+# Multi
 def eval_exp3(answer):
     print 'eval_exp3'
     global token
@@ -58,7 +58,7 @@ def eval_exp3(answer):
             print 'Answer 1 = ', answer
         elif op == '/':
             if temp == 0.0:
-                serror(3) # деление на нуль
+                serror(3) # devide by zero
                 answer = 0.0
                 print 'Answer = ', answer
             else:
@@ -70,7 +70,7 @@ def eval_exp3(answer):
         op = token
     return float(answer)
 
-# Возведение в степень 
+# pow 
 def eval_exp4(answer):
     print 'eval_exp4'
     global token
@@ -92,7 +92,7 @@ def eval_exp4(answer):
            #answer = answer * ex;
     return float(answer)
     
-# Умножение унарных операторов + и -
+# unar operators
 def eval_exp5(answer):
     print 'eval_exp5'
     global token
@@ -107,7 +107,7 @@ def eval_exp5(answer):
         print 'Answer = ', answer
     return float(answer)
 
-# Вычисление выражения в скобках
+# brackets function
 def eval_exp6(answer):
     print 'eval_exp6'
     global token
@@ -122,7 +122,7 @@ def eval_exp6(answer):
         answer = atom(answer);
     return float(answer)
 
-# Получение значения в скобках
+# brackets value
 def atom(answer):
     print 'atom'
     global token
@@ -132,17 +132,17 @@ def atom(answer):
         print 'Answer = ', answer
         get_token()
         return float(answer)
-    serror(0)  # иначе синтаксическая ошибка в выражении
+    serror(0)  # or sintax error
     print 'atom error'
     return float(answer)
     
-# Отображение сообщения об ошибке
+# error messange
 def serror(error):
     e = ['Синтаксическая ошибка', 'Несбалансированные скобки', 'Нет выражения', 'Деление на нуль']
     print e[error]
     return
 
-# Возврат очередной лексемы
+# token reader
 def get_token():
     global token
     global tok_type
@@ -151,8 +151,8 @@ def get_token():
     tok_type = 0
 
     if prog == '':
-        print 'конец выражения'
-        return False# конец выражения
+        print 'the end'
+        return False
     
     if prog in ('+','-','*','/','%','^','=','(',')'):
         tok_type = 'DELIMITER'
@@ -182,13 +182,13 @@ def get_token():
     print 'token = ', token, ', type = ', tok_type
     return True
 
-# Возвращение значения ИСТИНА, если с является разделителем
+# true if token is delimiter
 def isdelim(c):
     if c in ('+','-','*','/','%','^','=','(',')') or c == '\0' or c == '':
         return True
     return False
 
-# Проверка входнойстроки
+# string check
 def spellcheck(str):
     while get_token() == True:
         if tok_type == 'DELIMITER':
