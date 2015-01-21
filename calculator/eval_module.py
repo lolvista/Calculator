@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#__all__ = ["Calculator"]
 import math
 
 class Calc:
