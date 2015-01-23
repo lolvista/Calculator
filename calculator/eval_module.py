@@ -101,9 +101,9 @@ class Calc:
                     if temp == 0.0:
                         err = "Divide by zero"
                         raise ValueError, err
-                        answer = 0.0
+                        answer = 0.0 
                     else:
-                        answer = int(answer/temp)         
+                        answer = int(answer/temp)
                 elif op == '%':
                     answer = int(answer) % int(temp)
                 op = token
@@ -135,7 +135,7 @@ class Calc:
 
             answer = eval_expfun(answer)
 
-            if token == '^':
+            if token == '**' or token == '^':
                 get_token()
                 temp = eval_exp4(temp)
                 ex = answer
@@ -219,12 +219,20 @@ class Calc:
                     raise ValueError, err
                     return False
 
-                if token == '/' and prog == '/':
-                    token = '//'
+                if token == prog:
                     cur_pos += 1
-                elif token == '*' and prog == '*':
-                    token = '^'
-                    cur_pos += 1
+                    if token == '/':
+                        token = '//'
+                    elif token == '*':
+                        token = '**'
+                    elif token == '>':
+                        token = '>>'
+                        err = "Syntax error : " + token
+                        raise ValueError, err
+                    elif token == '<':
+                        token = '<<'
+                        err = "Syntax error : " + token
+                        raise ValueError, err
                 
                 if cur_pos < exp_lenght:
                     prog = expression[cur_pos]
@@ -249,12 +257,16 @@ class Calc:
             elif isnumber(prog):
                 token = ''
                 dot = False
+                if prog == '.':
+                    dot = True
+                    token = '0.'
+                    cur_pos += 1
+                    prog = expression[cur_pos]
                 while not isdelim(prog) and not issumbol(prog):
-                    if prog == '.' and dot == False:
+                    if dot == True and prog == '.':
+                        raise ValueError, "Multiple dot"
+                    if prog == '.':
                         dot = True
-                        token = '0'
-                    elif prog == '.' and dot == True:
-                        raise ValueError, "Double dot"
                     token += prog
                     if cur_pos < exp_lenght - 1:
                         cur_pos += 1
@@ -271,7 +283,7 @@ class Calc:
 
         def isdelim(c):
             'true if token is delimiter'
-            if c in ('+','-','*','/','%','^','=','(',')','\n','EOF',''):
+            if c in ('>','<','|','&','~','+','-','*','/','%','^','=','(',')','\n','EOF',''):
                 return True
             return False
 
