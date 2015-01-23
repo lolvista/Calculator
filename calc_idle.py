@@ -10,6 +10,6 @@ for line in f:
     except ValueError,e:
         print e.message
     else:
-        print 'output : ', a 
+        print a 
     i += 1
 f.close()
