@@ -23,7 +23,7 @@ class Calc:
 
     def Evaluate(self, expression):
         'Evaluate the expression'
-	    global token
+        global token
         global tok_type
         global cur_pos
         global exp_lenght
@@ -37,13 +37,13 @@ class Calc:
 
         def eval_exp():
             'Enter point'
-	        global token
+            global token
 
             answer = 0
             
             get_token()
             if token == '':
-		        err = "Bad token : " + token
+                err = "Bad token : " + token
                 raise ValueError, err
                 return 0.0
             else:
@@ -52,7 +52,7 @@ class Calc:
 
         def eval_exp2(answer):
             'Summ'
-	        global token
+            global token
             global tok_type
 
             temp = 0
@@ -71,7 +71,7 @@ class Calc:
 
         def eval_exp3(answer):
             'Multi'
-	        global token
+            global token
             global tok_type
             global cur_pos
 
@@ -93,14 +93,14 @@ class Calc:
                 elif op == '/':
                     if temp == 0.0:
                         err = "Divide by zero"
-                	    raise ValueError, err
+                        raise ValueError, err
                         answer = 0.0
                     else:
                         answer = answer /temp 
                 elif op == '//':
                     if temp == 0.0:
                         err = "Divide by zero"
-                	    raise ValueError, err
+                        raise ValueError, err
                         answer = 0.0
                     else:
                         answer = int(answer/temp)         
@@ -111,7 +111,7 @@ class Calc:
 
         def eval_exp4(answer):
             'unar operators'
-	    global token
+            global token
             global tok_type
 
             op = 0
@@ -127,7 +127,7 @@ class Calc:
 
         def eval_exp5(answer):
             'pow'
-	        global token
+            global token
             global tok_type
 
             temp = 0.0
@@ -147,7 +147,7 @@ class Calc:
           
         def eval_expfun(answer):
             'function, variable and constant'
-	        global token
+            global token
             global tok_type
 
             if tok_type == 'FUNCTION':
@@ -166,14 +166,14 @@ class Calc:
           
         def eval_exp6(answer):
             'brackets function'
-	    global token
+            global token
             global tok_type
 
             if token == '(':
                 get_token()
                 answer = eval_exp2(answer)
                 if token != ')':
-		    err = "Unbalanced brackets"
+                    err = "Unbalanced brackets"
                     raise ValueError, err
                 get_token()
             else:
@@ -182,15 +182,15 @@ class Calc:
 
         def atom(answer):
             'value'
-	        global token
+            global token
             global tok_type
 
             if tok_type == 'NUMBER':
-		        try:
-		            answer = float(token)
-		        except ValueError,e:
-    		        print e.message
-        		else:
+                try:
+                    answer = float(token)
+                except ValueError,e:
+                    print e.message
+                else:
                     get_token()
                     return float(answer)
             else :
@@ -199,7 +199,7 @@ class Calc:
 
         def get_token():
             'Extract the token from the input string'
-	    global token
+            global token
             global tok_type
             global cur_pos
             global exp_lenght
@@ -211,11 +211,11 @@ class Calc:
             if isdelim(prog):
                 tok_type = 'DELIMITER'
                 token = prog
-        		if cur_pos < exp_lenght - 1:
+                if cur_pos < exp_lenght - 1:
                     cur_pos += 1
-        		    prog = expression[cur_pos]
+                    prog = expression[cur_pos]
                 elif token != ')':
-        		    err = "Syntax error : " + token
+                    err = "Syntax error : " + token
                     raise ValueError, err
                     return False
 
@@ -225,8 +225,8 @@ class Calc:
                 elif token == '*' and prog == '*':
                     token = '^'
                     cur_pos += 1
-        		
-        		if cur_pos < exp_lenght:
+                
+                if cur_pos < exp_lenght:
                     prog = expression[cur_pos]
                 else:
                     prog = ''
@@ -244,18 +244,18 @@ class Calc:
                 elif token in self.__constantList.keys():
                     tok_type = 'CONSTANT'
                 else:
-		            err = "Unknown expression : " + token
+                    err = "Unknown expression : " + token
                     raise ValueError, err
             elif isnumber(prog):
                 token = ''
                 dot = False
                 while not isdelim(prog) and not issumbol(prog):
                     if prog == '.' and dot == False:
-			            dot = True
+                        dot = True
                         token = '0'
                     elif prog == '.' and dot == True:
-			            raise ValueError, "Double dot"
-		            token += prog
+                        raise ValueError, "Double dot"
+                    token += prog
                     if cur_pos < exp_lenght - 1:
                         cur_pos += 1
                         prog = expression[cur_pos]
@@ -263,7 +263,7 @@ class Calc:
                         prog = ''
                 tok_type = 'NUMBER'
             else:
-	            err = "Unknown expression : " + token
+                err = "Unknown expression : " + token
                 raise ValueError, err
                 token = ''
                 return False

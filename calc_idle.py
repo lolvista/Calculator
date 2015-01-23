@@ -1,5 +1,4 @@
 import calculator
-import sys
 
 c = calculator.Calc(calculator.functionList)
 
