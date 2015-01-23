@@ -1,5 +1,5 @@
 # Calculator
 simple calculator
 
-test.py contains main program. Example:
-python test.py -f m.txt
+calc.py contains main program. Example:
+python calc.py -f m.txt
