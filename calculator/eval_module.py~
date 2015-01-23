@@ -187,6 +187,9 @@ class Calc:
             global tok_type
 
             if tok_type == 'NUMBER':
+                if len(token) > 1 and token[0] == '0' and token[1] != '.':
+		    err = "Syntax error, can't convert into number : " + token
+                    raise ValueError, err
 		try:
 		    answer = float(token)
 		except ValueError,e:
