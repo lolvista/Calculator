@@ -8,7 +8,7 @@ if sys.argv[1] == '-f':
     i = 1 
     for line in f:
         try:
-	        a = c.Evaluate(line.replace(" ", "").strip("\n"))
+	    a = c.Evaluate(line.replace(" ", "").strip("\n"))
         except ValueError,e:
             print e.message
         else:
