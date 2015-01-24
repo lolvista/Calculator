@@ -71,7 +71,7 @@ class Calc:
                         bin_str = bin(int(answer)|int(temp))
                         answer = float(literal_eval(bin_str))
                 else:
-                    err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
+                    err = "Can't use a binary operator with fractional numbers: " + str(answer) + ', ' + str(temp) 
                     raise ValueError, err
                 op = token
             return float(answer)
@@ -95,7 +95,7 @@ class Calc:
                     bin_str = bin(int(answer)&int(temp))
                     answer = float(literal_eval(bin_str))
                 else:
-                    err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
+                    err = "Can't use a binary operator with fractional numbers: " + str(answer) + ', ' + str(temp) 
                     raise ValueError, err
                 op = token
             return float(answer) 
@@ -118,7 +118,7 @@ class Calc:
                     elif op == '>>':
                         answer = int(answer/(2*temp))
                 else:
-                    err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
+                    err = "Can't use a binary operator with fractional numbers: " + str(answer) + ', ' + str(temp) 
                     raise ValueError, err
                 op = token
             return float(answer)
