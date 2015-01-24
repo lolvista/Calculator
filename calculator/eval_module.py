@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import math
+from ast import literal_eval
 
 class Calc:
     'Base class for calculating everything'
@@ -64,9 +65,11 @@ class Calc:
                 temp = eval_expb2(temp)
                 if (float(answer)).is_integer() and (float(temp)).is_integer():
                     if op == '^':
-                        answer = bin(int(answer)^int(temp))
+                        bin_str = bin(int(answer)^int(temp))
+                        answer = float(literal_eval(bin_str))
                     elif op == '|':
-                        answer = bin(int(answer)|int(temp))
+                        bin_str = bin(int(answer)|int(temp))
+                        answer = float(literal_eval(bin_str))
                 else:
                     err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
                     raise ValueError, err
@@ -89,7 +92,8 @@ class Calc:
                 get_token()
                 temp = eval_expb3(temp)
                 if (float(answer)).is_integer() and (float(temp)).is_integer():
-                    answer = bin(int(answer)&int(temp))
+                    bin_str = bin(int(answer)&int(temp))
+                    answer = float(literal_eval(bin_str))
                 else:
                     err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
                     raise ValueError, err
@@ -110,9 +114,9 @@ class Calc:
                 temp = eval_exp2(temp)
                 if (float(answer)).is_integer() and (float(temp)).is_integer():
                     if op == '<<':
-                        answer = answer*(2*temp)
+                        answer = int(answer*(2*temp))
                     elif op == '>>':
-                        answer = answer/(2*temp)
+                        answer = int(answer/(2*temp))
                 else:
                     err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
                     raise ValueError, err
@@ -196,12 +200,12 @@ class Calc:
 
             op = ''
 
-            if token == '+' or token == '-':
+            if token == '+' or token == '-' or token == '~':
                 op = token
                 get_token()
 
             answer = eval_exp5(answer)
-            if op == '-':
+            if op == '-' or op == '~':
                 answer = -answer
             return float(answer)
 
