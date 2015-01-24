@@ -47,8 +47,77 @@ class Calc:
                 raise ValueError, err
                 return 0.0
             else:
-                answer = eval_exp2(answer);
+                answer = eval_expb1(answer);
             return float(answer);
+
+        def eval_expb1(answer):
+            '^ |'
+            global token
+            global tok_type
+
+            temp = 0
+            
+            answer = eval_expb2(answer);
+            op = token
+            while op == '^' or op == '|':
+                get_token()
+                temp = eval_expb2(temp)
+                if (float(answer)).is_integer() and (float(temp)).is_integer():
+                    if op == '^':
+                        answer = bin(int(answer)^int(temp))
+                    elif op == '|':
+                        answer = bin(int(answer)|int(temp))
+                else:
+                    err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
+                    raise ValueError, err
+                op = token
+            return float(answer)
+
+        def eval_expb2(answer):
+            '&'
+            global token
+            global tok_type
+            global cur_pos
+            global prog
+
+            temp = 0
+            
+            answer = eval_expb3(answer)
+
+            op = token
+            while op == '&':
+                get_token()
+                temp = eval_expb3(temp)
+                if (float(answer)).is_integer() and (float(temp)).is_integer():
+                    answer = bin(int(answer)&int(temp))
+                else:
+                    err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
+                    raise ValueError, err
+                op = token
+            return float(answer) 
+
+        def eval_expb3(answer):
+            '<< >>'
+            global token
+            global tok_type
+
+            temp = 0
+            
+            answer = eval_exp2(answer);
+            op = token
+            while op == '>>' or op == '<<':
+                get_token()
+                temp = eval_exp2(temp)
+                if (float(answer)).is_integer() and (float(temp)).is_integer():
+                    if op == '<<':
+                        answer = temp
+                    elif op == '>>':
+                        answer = temp
+                else:
+                    err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
+                    raise ValueError, err
+                op = token
+            return float(answer)
 
         def eval_exp2(answer):
             'Summ'
@@ -81,7 +150,7 @@ class Calc:
 
             answer = eval_exp4(answer)
 
-            if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT':
+            if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT' or tok_type == 'NUMBER':
                 op = '*'
                 correct = True
             else :
@@ -112,7 +181,8 @@ class Calc:
                         answer = int(answer/temp)
                 elif op == '%':
                     answer = int(answer) % int(temp)
-                if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT':
+
+                if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT' or tok_type == 'NUMBER':
                     op = '*'
                     correct = True
                 else :
@@ -120,7 +190,7 @@ class Calc:
             return float(answer)
 
         def eval_exp4(answer):
-            'unar operators'
+            'unar operators and ~'
             global token
             global tok_type
 
@@ -145,7 +215,7 @@ class Calc:
 
             answer = eval_expfun(answer)
 
-            if token == '**' or token == '^':
+            if token == '**':
                 get_token()
                 temp = eval_exp4(temp)
                 ex = answer
@@ -178,11 +248,8 @@ class Calc:
             'brackets function'
             global token
             global tok_type
-            global cur_pos
-            global prog
             
             temp = 0
-            correct = False
 
             if token == '(':
                 get_token()
@@ -191,37 +258,6 @@ class Calc:
                     err = "Unbalanced brackets"
                     raise ValueError, err
                 get_token()
-                if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT' or tok_type == 'NUMBER':
-                    op = '*'
-                    while op == '*' or op == '/' or op == '%' or op == '//':
-                        if correct == False:
-                            get_token()
-                        else :
-                            correct = False
-                        temp = eval_exp4(temp)
-                        if op == '*':
-                            answer = answer * temp
-                        elif op == '/':
-                            if temp == 0.0:
-                                err = "Divide by zero"
-                                raise ValueError, err
-                                answer = 0.0
-                            else:
-                                answer = answer /temp 
-                        elif op == '//':
-                            if temp == 0.0:
-                                err = "Divide by zero"
-                                raise ValueError, err
-                                answer = 0.0 
-                            else:
-                                answer = int(answer/temp)
-                        elif op == '%':
-                            answer = int(answer) % int(temp)
-                        if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT':
-                            op = '*'
-                            correct = True
-                        else :
-                            op = token
             else:
                 answer = atom(answer);
             return float(answer)
@@ -252,6 +288,7 @@ class Calc:
             global prog
 
             if prog == '':
+                tok_type = ''
                 return False
             
             if isdelim(prog):
@@ -275,12 +312,8 @@ class Calc:
                         token = '+'    
                     elif token == '>':
                         token = '>>'
-                        err = "Syntax error : " + token
-                        raise ValueError, err
                     elif token == '<':
                         token = '<<'
-                        err = "Syntax error : " + token
-                        raise ValueError, err
                 if token == ':':
                     token = '/'
                 if cur_pos < exp_lenght:
