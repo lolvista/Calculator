@@ -74,6 +74,7 @@ class Calc:
             global token
             global tok_type
             global cur_pos
+            global prog
 
             temp = 0
 
@@ -82,7 +83,7 @@ class Calc:
             if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT':
                 token = '*'
                 cur_pos -= 1
-                prog = '('
+                prog = expression[cur_pos]
 
             op = token
             while op == '*' or op == '/' or op == '%' or op == '//':
@@ -114,7 +115,7 @@ class Calc:
             global token
             global tok_type
 
-            op = 0
+            op = ''
 
             if token == '+' or token == '-':
                 op = token
@@ -122,7 +123,7 @@ class Calc:
 
             answer = eval_exp5(answer)
             if op == '-':
-                answer = - answer
+                answer = -answer
             return float(answer)
 
         def eval_exp5(answer):
@@ -225,6 +226,8 @@ class Calc:
                         token = '//'
                     elif token == '*':
                         token = '**'
+                    elif token == '-':
+                        token = '+'    
                     elif token == '>':
                         token = '>>'
                         err = "Syntax error : " + token
@@ -233,16 +236,17 @@ class Calc:
                         token = '<<'
                         err = "Syntax error : " + token
                         raise ValueError, err
-                
+                if token == ':':
+                    token = '/'
                 if cur_pos < exp_lenght:
                     prog = expression[cur_pos]
                 else:
                     prog = ''
             elif issumbol(prog):
-                token = '';
+                token = ''
                 while not isdelim(prog) and (issumbol(prog) or isnumber(prog)):
-                    token += prog;
-                    cur_pos += 1;
+                    token += prog
+                    cur_pos += 1
                     if cur_pos < exp_lenght:
                         prog = expression[cur_pos]
                     else:
@@ -283,7 +287,7 @@ class Calc:
 
         def isdelim(c):
             'true if token is delimiter'
-            if c in ('>','<','|','&','~','+','-','*','/','%','^','=','(',')','\n','EOF',''):
+            if c in ('>','<','|','&','~','+','-','*','/','%','^',':','=','(',')','\n','EOF',''):
                 return True
             return False
 
