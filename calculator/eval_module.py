@@ -77,17 +77,22 @@ class Calc:
             global prog
 
             temp = 0
+            correct = False
 
             answer = eval_exp4(answer)
 
             if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT':
-                token = '*'
-                cur_pos -= 1
-                prog = expression[cur_pos]
+                op = '*'
+                correct = True
+            else :
+                op = token
 
-            op = token
             while op == '*' or op == '/' or op == '%' or op == '//':
-                get_token()
+                if correct == False:
+                    get_token()
+                else :
+                    correct = False
+
                 temp = eval_exp4(temp)
                 if op == '*':
                     answer = answer * temp
@@ -107,7 +112,11 @@ class Calc:
                         answer = int(answer/temp)
                 elif op == '%':
                     answer = int(answer) % int(temp)
-                op = token
+                if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT':
+                    op = '*'
+                    correct = True
+                else :
+                    op = token
             return float(answer)
 
         def eval_exp4(answer):
@@ -169,6 +178,11 @@ class Calc:
             'brackets function'
             global token
             global tok_type
+            global cur_pos
+            global prog
+            
+            temp = 0
+            correct = False
 
             if token == '(':
                 get_token()
@@ -177,6 +191,37 @@ class Calc:
                     err = "Unbalanced brackets"
                     raise ValueError, err
                 get_token()
+                if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT' or tok_type == 'NUMBER':
+                    op = '*'
+                    while op == '*' or op == '/' or op == '%' or op == '//':
+                        if correct == False:
+                            get_token()
+                        else :
+                            correct = False
+                        temp = eval_exp4(temp)
+                        if op == '*':
+                            answer = answer * temp
+                        elif op == '/':
+                            if temp == 0.0:
+                                err = "Divide by zero"
+                                raise ValueError, err
+                                answer = 0.0
+                            else:
+                                answer = answer /temp 
+                        elif op == '//':
+                            if temp == 0.0:
+                                err = "Divide by zero"
+                                raise ValueError, err
+                                answer = 0.0 
+                            else:
+                                answer = int(answer/temp)
+                        elif op == '%':
+                            answer = int(answer) % int(temp)
+                        if token == '(' or tok_type == 'FUNCTION' or tok_type == 'CONSTANT':
+                            op = '*'
+                            correct = True
+                        else :
+                            op = token
             else:
                 answer = atom(answer);
             return float(answer)
