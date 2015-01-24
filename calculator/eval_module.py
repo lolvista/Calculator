@@ -110,9 +110,9 @@ class Calc:
                 temp = eval_exp2(temp)
                 if (float(answer)).is_integer() and (float(temp)).is_integer():
                     if op == '<<':
-                        answer = temp
+                        answer = answer*(2*temp)
                     elif op == '>>':
-                        answer = temp
+                        answer = answer/(2*temp)
                 else:
                     err = "Can't do with float: " + str(answer) + ', ' + str(temp) 
                     raise ValueError, err
@@ -253,7 +253,7 @@ class Calc:
 
             if token == '(':
                 get_token()
-                answer = eval_exp2(answer)
+                answer = eval_expb1(answer)
                 if token != ')':
                     err = "Unbalanced brackets"
                     raise ValueError, err
