@@ -182,7 +182,10 @@ class Calc:
                         raise ValueError, err
                         answer = 0.0 
                     else:
-                        answer = int(answer/temp)
+                        if answer < 0.0:
+                            answer = int(answer/temp) - 1 
+                        else:
+                            answer = int(answer/temp)
                 elif op == '%':
                     answer = int(answer) % int(temp)
 
